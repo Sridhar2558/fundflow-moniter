@@ -1,0 +1,87 @@
+{% extends "transactions/base.html" %}
+
+{% block title %}Register{% endblock %}
+{% block header %}Create an Account{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                {{ error }}<br>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mb-3">
+                        <label for="id_username" class="form-label">Username</label>
+                        <input type="text" name="username" class="form-control" id="id_username" required>
+                        <div class="form-text">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_password1" class="form-label">Password</label>
+                        <div class="input-group">
+                            <input type="password" name="password1" class="form-control" id="id_password1" required>
+                            <button class="btn btn-outline-secondary toggle-password" type="button" data-target="id_password1">
+                                <i class="bi bi-eye"></i> Show
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_password2" class="form-label">Password confirmation</label>
+                        <div class="input-group">
+                            <input type="password" name="password2" class="form-control" id="id_password2" required>
+                            <button class="btn btn-outline-secondary toggle-password" type="button" data-target="id_password2">
+                                <i class="bi bi-eye"></i> Show
+                            </button>
+                        </div>
+                        <div class="form-text">Enter the same password as before, for verification.</div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </div>
+                </form>
+                
+                <div class="mt-3 text-center">
+                    <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleButtons = document.querySelectorAll('.toggle-password');
+        
+        toggleButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const passwordField = document.getElementById(targetId);
+                
+                // Toggle the type attribute
+                const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordField.setAttribute('type', type);
+                
+                // Toggle the button text/icon
+                if (type === 'text') {
+                    this.innerHTML = '<i class="bi bi-eye-slash"></i> Hide';
+                } else {
+                    this.innerHTML = '<i class="bi bi-eye"></i> Show';
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
